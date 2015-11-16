@@ -1,91 +1,122 @@
-bool GREEN_BTNpressed, RED_BTNpressed, YELLOW_BTNpressed, BLUE_BTNpressed, enterPressed;
+/*
+ SparkyGuitar v0.1.1
+ Works like a keyboard.
 
+ Works only with with Arduino Micro, Leonardo and Due (and every UNO, MEGA, ... with hoodLoader). 
+
+ The circuit:
+ * 4 pushbuttons attached from pins 10, 7, 3, 4, A0 to +5V (or 3.3V on a 3.3V-based Arduino)
+ * 10 K resistor attached to pins 10, 7, 3, 4, A0 from ground
+ * Note: for more information about the Keyboard and Mouse features of Arduino Micro, Leonardo and Due see     
+   https://www.arduino.cc/en/Reference/MouseKeyboard
+
+ created 16 November 2015
+ by SparkyCola <https://github.com/SparkyCola/>
+ modified  16 November 2015
+ by SparkyCola
+
+ This code is in public domain.
+ https://github.com/SparkyCola/SparkyGuitar/
+ */
+
+//define the pressed states for each button:
+bool greenBtnPressed, redBtnPressed, yellowBtnPressed, blueBtnPressed, pickBtnPressed;
+
+// pins for the buttons
 #define BLUE_BTN    10
 #define YELLOW_BTN  7
 #define RED_BTN     3 
 #define GREEN_BTN   4
-#define ENTER       A0
+#define PICK_BTN    A0
 
+// keys which will be sent keyodes can be seen at https://www.arduino.cc/en/Reference/KeyboardModifiers
 #define BLUE_KEY    KEY_F12
 #define YELLOW_KEY  KEY_F11
 #define RED_KEY     KEY_F10
 #define GREEN_KEY   KEY_F9
-#define ENTER_KEY   KEY_F8
+#define PICK_KEY    KEY_F8
 
 void setup() {
-  // put your setup code here, to run once:
+  // intialize the Keyboard
   Keyboard.begin();
+  // initialize the buttons as input:
   pinMode(BLUE_BTN, INPUT);
   pinMode(YELLOW_BTN, INPUT);
   pinMode(RED_BTN, INPUT);
   pinMode(GREEN_BTN, INPUT);
-  pinMode(ENTER, INPUT);
-  GREEN_BTNpressed = false;
-  RED_BTNpressed = false;
-  YELLOW_BTNpressed = false;
-  BLUE_BTNpressed = false;
-  enterPressed = false;  
+  pinMode(PICK_BTN, INPUT);
+  // set pressed states of each button to false:
+  greenBtnPressed = false;
+  redBtnPressed = false;
+  yellowBtnPressed = false;
+  blueBtnPressed = false;
+  pickBtnPressed = false;  
 }
 
 void loop() {
-  //BLUE_BTN
-  if(digitalRead(BLUE_BTN))
+  //if BLUE_BTN is pressed
+  if(digitalRead(BLUE_BTN)) //if pressed
   {
-     Keyboard.press(BLUE_KEY);
-     BLUE_BTNpressed = true;
+    //"press" the blue key (F12 by defalut)
+    Keyboard.press(BLUE_KEY);
+    //set pressed to true 
+    blueBtnPressed = true;
   }
-  else if(BLUE_BTNpressed)
+  //if BLUE_BTN isn't pressed and was pressed before
+  else if(blueBtnPressed)
   {
+    //"release" the blue key (F12 by defalut)
     Keyboard.release(BLUE_KEY);
-    BLUE_BTNpressed = false;
+    //set pressed to false 
+    blueBtnPressed = false;
   }
 
   //YELLOW_BTN
   if(digitalRead(YELLOW_BTN))
   {
      Keyboard.press(YELLOW_KEY);
-     YELLOW_BTNpressed = true;
+     yellowBtnPressed = true;
   }
-  else if(YELLOW_BTNpressed)
+  else if(yellowBtnPressed)
   {
     Keyboard.release(YELLOW_KEY);
-    YELLOW_BTNpressed = false;
+    yellowBtnPressed = false;
   }
 
   //RED_BTN
   if(digitalRead(RED_BTN))
   {
      Keyboard.press(RED_KEY);
-     RED_BTNpressed = true;
+     redBtnPressed = true;
   }
-  else if(RED_BTNpressed)
+  else if(redBtnPressed)
   {
     Keyboard.release(RED_KEY);
-    RED_BTNpressed = false;
+    redBtnPressed = false;
   }
 
   //GREEN BTN
   if(digitalRead(GREEN_BTN))
   {
      Keyboard.press(GREEN_KEY);
-     GREEN_BTNpressed = true;
+     greenBtnPressed = true;
   }
-  else if(GREEN_BTNpressed)
+  else if(greenBtnPressed)
   {
     Keyboard.release(GREEN_KEY);
-    GREEN_BTNpressed = false;
+    greenBtnPressed = false;
   }
 
   //ENTER
-  if(digitalRead(ENTER))
+  if(digitalRead(PICK_BTN))
   {
-     Keyboard.press(ENTER_KEY);
-     enterPressed = true;
+     Keyboard.press(PICK_KEY);
+     pickBtnPressed = true;
   }
-  else if(enterPressed)
+  else if(pickBtnPressed)
   {
-    Keyboard.release(ENTER_KEY);
-    enterPressed = false;
+    Keyboard.release(PICK_KEY);
+    pickBtnPressed = false;
   }
   
 }
